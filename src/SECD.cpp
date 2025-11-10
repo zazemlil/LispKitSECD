@@ -84,8 +84,9 @@ void SECD::_join()
 {
 }
 
-void SECD::_car()
-{
+void SECD::_car() {
+    _stack = _stack->car()->car()->cons(_stack->cdr());
+    _control = _control->cdr();
 }
 
 void SECD::_cdr() {

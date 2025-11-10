@@ -1,1 +1,1 @@
-( LDC (1 2 3) CDR STOP)
+( LDC ((1 5) 2 3) CAR STOP)

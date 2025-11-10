@@ -68,10 +68,7 @@ public:
         }
     }
 
-    std::shared_ptr<ASTNode>& car() {
-        return this->getStatement(0);
-    }
-
+    std::shared_ptr<ASTNode> car();
     std::shared_ptr<ASTNode> cdr();
     std::shared_ptr<ListNode> cons(std::shared_ptr<ASTNode> node);
 };
@@ -143,6 +140,14 @@ public:
     std::string getValue() { return value; }
     Identifier(std::string t, std::string v) : ASTNode(t), value(v) {}
 };
+
+inline std::shared_ptr<ASTNode> ASTNode::car() {
+    if (this->getStatementCount() > 0 || this->getNodeType() == "NIL") {
+        if (this->getNodeType() == "NIL") return shared_from_this();
+        return this->getStatement(0);
+    }
+    throw std::runtime_error("Car error: arg must be Nil or List");
+}
 
 inline std::shared_ptr<ASTNode> ASTNode::cdr() {
     if (this->getStatementCount() > 0 || this->getNodeType() == "NIL") {
