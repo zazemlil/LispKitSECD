@@ -15,7 +15,14 @@ int main(int argc, char* argv[])
     ast.print();
 
     SECD* secd = new SECD();
-    syntax_tree::AST result = secd->execute(ast.getRoot());
+    syntax_tree::AST result;
+    try {
+        result = secd->execute(ast.getRoot());
+        std::cout << "SECD execution success.\n";
+    }
+    catch(const std::exception& e) {
+        std::cerr << "SECD execution error: `" << e.what() << "`\n\n";
+    }
 
     std::cout << "-----------------------------\n";
     std::cout << "---------Result AST:---------\n";

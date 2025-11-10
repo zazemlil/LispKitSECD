@@ -44,7 +44,7 @@ AST SECD::execute(Node fn) {
         }
     }
 
-    return syntax_tree::AST(_stack);
+    return syntax_tree::AST(_stack->getStatement(0));
 }
 
 void SECD::_ld()
@@ -52,7 +52,6 @@ void SECD::_ld()
 }
 
 void SECD::_ldc() {
-    _control->cdr()->car()->cons(_stack)->printFlat();
     _stack = _control->cdr()->car()->cons(_stack);
     _control = _control->cdr()->cdr();
 }
@@ -105,28 +104,70 @@ void SECD::_equal()
 {
 }
 
-void SECD::_add()
-{
+void SECD::_add() {
+    auto first = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->cdr()->car());
+    auto second = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->car());
+    if (first && second) {
+        auto new_num = std::make_shared<syntax_tree::LiteralInt>("LiteralInt", first->getValue() + second->getValue());
+        _stack = new_num->cons(_stack->cdr()->cdr());
+        _control = _control->cdr();
+    }
+    else { throw std::runtime_error("Add operation requires integer operands"); }
 }
 
-void SECD::_sub()
-{
+void SECD::_sub() {
+    auto first = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->cdr()->car());
+    auto second = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->car());
+    if (first && second) {
+        auto new_num = std::make_shared<syntax_tree::LiteralInt>("LiteralInt", first->getValue() - second->getValue());
+        _stack = new_num->cons(_stack->cdr()->cdr());
+        _control = _control->cdr();
+    }
+    else { throw std::runtime_error("Sub operation requires integer operands"); }
 }
 
-void SECD::_mul()
-{
+void SECD::_mul() {
+    auto first = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->cdr()->car());
+    auto second = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->car());
+    if (first && second) {
+        auto new_num = std::make_shared<syntax_tree::LiteralInt>("LiteralInt", first->getValue() * second->getValue());
+        _stack = new_num->cons(_stack->cdr()->cdr());
+        _control = _control->cdr();
+    }
+    else { throw std::runtime_error("Mul operation requires integer operands"); }
 }
 
-void SECD::_dive()
-{
+void SECD::_dive() {
+    auto first = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->cdr()->car());
+    auto second = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->car());
+    if (first && second) {
+        auto new_num = std::make_shared<syntax_tree::LiteralInt>("LiteralInt", first->getValue() / second->getValue());
+        _stack = new_num->cons(_stack->cdr()->cdr());
+        _control = _control->cdr();
+    }
+    else { throw std::runtime_error("Dive operation requires integer operands"); }
 }
 
-void SECD::_rem()
-{
+void SECD::_rem() {
+    auto first = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->cdr()->car());
+    auto second = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->car());
+    if (first && second) {
+        auto new_num = std::make_shared<syntax_tree::LiteralInt>("LiteralInt", first->getValue() % second->getValue());
+        _stack = new_num->cons(_stack->cdr()->cdr());
+        _control = _control->cdr();
+    }
+    else { throw std::runtime_error("Rem operation requires integer operands"); }
 }
 
-void SECD::_le()
-{
+void SECD::_le() {
+    auto first = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->cdr()->car());
+    auto second = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_stack->car());
+    if (first && second) {
+        auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", first->getValue() <= second->getValue());
+        _stack = new_bool->cons(_stack->cdr()->cdr());
+        _control = _control->cdr();
+    }
+    else { throw std::runtime_error("Le operation requires integer operands"); }
 }
 
 void SECD::_stop() {
