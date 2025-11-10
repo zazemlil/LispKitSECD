@@ -96,8 +96,9 @@ void SECD::_atom()
 {
 }
 
-void SECD::_cons()
-{
+void SECD::_cons() {
+    _stack = _stack->car()->cons(_stack->cdr()->car())->cons(_stack->cdr()->cdr());
+    _control = _control->cdr();
 }
 
 void SECD::_equal() {

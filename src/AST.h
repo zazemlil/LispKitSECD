@@ -156,11 +156,16 @@ inline std::shared_ptr<ASTNode> ASTNode::cdr() {
 }
 
 inline std::shared_ptr<ListNode> ASTNode::cons(std::shared_ptr<ASTNode> node) {
-    std::shared_ptr<ListNode> l = std::make_shared<ListNode>("LIST");
+    if (node->getStatementCount() > 0 || node->getNodeType() == "NIL") {
+        std::shared_ptr<ListNode> l = std::make_shared<ListNode>("LIST");
     
-    l->addStatement(shared_from_this());
-    l->addStatements(node->getStatements());
-    return l;
+        l->addStatement(shared_from_this());
+        
+        l->addStatements(node->getStatements());
+        return l;
+    }
+    
+    throw std::runtime_error("Cons error: second param must be List or Nil");
 }
 
 
