@@ -10,9 +10,7 @@ typedef std::shared_ptr<syntax_tree::LiteralInt> LiteralInt;
 typedef std::shared_ptr<syntax_tree::LiteralNil> LiteralNil;
 typedef std::shared_ptr<syntax_tree::LiteralBool> LiteralBool;
 
-class SECD
-{
-private:
+class SECD {
     Node _stack;
     Node _environ;
     Node _control;
@@ -26,9 +24,32 @@ private:
 
     bool stopped;
 
+    void _ld();
+    void _ldc();
+    void _ldf();
+    void _ap();
+    void _rtn();
+    void _dum();
+    void _rap();
+    void _sel();
+    void _join();
+    void _car();
+    void _cdr();
+    void _atom();
+    void _cons();
+    void _equal();
+    void _add();
+    void _sub();
+    void _mul();
+    void _dive();
+    void _rem();
+    void _le();
+    void _stop();
+
 public:
     SECD();
     ~SECD();
 
     AST execute(Node fn);
+    
 };
