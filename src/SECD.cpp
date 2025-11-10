@@ -100,8 +100,48 @@ void SECD::_cons()
 {
 }
 
-void SECD::_equal()
-{
+void SECD::_equal() {
+    auto first = _stack->cdr()->car();
+    auto second = _stack->car();
+
+    bool first_is_atom = (std::dynamic_pointer_cast<syntax_tree::ListNode>(first) == nullptr);
+    bool second_is_atom = (std::dynamic_pointer_cast<syntax_tree::ListNode>(second) == nullptr);
+
+    if (first_is_atom || second_is_atom) {
+        if (auto first_lit = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(first)) {
+            if (auto second_lit = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(second)) {
+                auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", first_lit->getValue() 
+                                                                                        == second_lit->getValue());
+                _stack = new_bool->cons(_stack->cdr()->cdr());
+                _control = _control->cdr();
+                return;
+            }
+        }
+        if (auto first_lit = std::dynamic_pointer_cast<syntax_tree::LiteralBool>(first)) {
+            if (auto second_lit = std::dynamic_pointer_cast<syntax_tree::LiteralBool>(second)) {
+                auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", first_lit->getValue() 
+                                                                                        == second_lit->getValue());
+                _stack = new_bool->cons(_stack->cdr()->cdr());
+                _control = _control->cdr();
+                return;
+            }
+        }
+        if (auto first_lit = std::dynamic_pointer_cast<syntax_tree::Identifier>(first)) {
+            if (auto second_lit = std::dynamic_pointer_cast<syntax_tree::Identifier>(second)) {
+                auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", first_lit->getValue() 
+                                                                                        == second_lit->getValue());
+                _stack = new_bool->cons(_stack->cdr()->cdr());
+                _control = _control->cdr();
+                return;
+            }
+        }
+        auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", false);
+        _stack = new_bool->cons(_stack->cdr()->cdr());
+        _control = _control->cdr();
+        return;
+    }
+
+    throw std::runtime_error("Equal operation requires 1 or 2 atom operands");
 }
 
 void SECD::_add() {
