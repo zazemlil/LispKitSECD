@@ -7,7 +7,10 @@
 
 namespace syntax_tree {
 
-class ASTNode {
+class ListNode;
+class LiteralNil;
+
+class ASTNode : public std::enable_shared_from_this<ASTNode> {
     std::string node_type;
     std::vector<std::shared_ptr<ASTNode>> statements;
 
@@ -64,6 +67,13 @@ public:
             os << ")";
         }
     }
+
+    std::shared_ptr<ASTNode>& car() {
+        return this->getStatement(0);
+    }
+
+    std::shared_ptr<ASTNode> cdr();
+    std::shared_ptr<ListNode> cons(std::shared_ptr<ASTNode> node);
 };
 
 
@@ -133,6 +143,25 @@ public:
     std::string getValue() { return value; }
     Identifier(std::string t, std::string v) : ASTNode(t), value(v) {}
 };
+
+inline std::shared_ptr<ASTNode> ASTNode::cdr() {
+    if (this->getStatementCount() <= 1) {
+        return std::make_shared<LiteralNil>("NIL");
+    }
+    std::shared_ptr<ASTNode> l = std::make_shared<ListNode>("LIST");
+    for (size_t i = 1; i < this->getStatementCount(); i++) {
+        l->addStatement(this->getStatement(i));
+    }
+    return l;
+}
+
+inline std::shared_ptr<ListNode> ASTNode::cons(std::shared_ptr<ASTNode> node) {
+    std::shared_ptr<ListNode> l = std::make_shared<ListNode>("LIST");
+    
+    l->addStatement(shared_from_this());
+    l->addStatements(node->getStatements());
+    return l;
+}
 
 
 };
