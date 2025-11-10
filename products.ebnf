@@ -1,0 +1,12 @@
+S -> EXPR
+
+EXPR -> ATOM
+        | "(" LIST ")"
+
+ATOM -> id | num | "Nil" | "True" | "False"
+
+LIST -> EXPR LIST
+        | ε
+
+num -> [-]?[0-9]+ 
+id  -> [a-zA-z][a-zA-z|0-9]*

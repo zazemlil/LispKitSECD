@@ -1,0 +1,138 @@
+#pragma once
+#include <memory>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
+
+namespace syntax_tree {
+
+class ASTNode {
+    std::string node_type;
+    std::vector<std::shared_ptr<ASTNode>> statements;
+
+public:
+    ASTNode() {}
+    ASTNode(std::string t) : node_type(t) {}
+    
+    virtual ~ASTNode() = default;
+
+    std::string getNodeType() const { return node_type; }
+    size_t getStatementCount() const { return statements.size(); }
+
+    std::shared_ptr<ASTNode>& getStatement(size_t index) { return statements.at(index); }
+    void addStatement(std::shared_ptr<ASTNode> stmt) { statements.push_back(stmt); }
+
+    void setStatements(std::vector<std::shared_ptr<ASTNode>>& new_statements) { this->statements = new_statements; }
+    std::vector<std::shared_ptr<ASTNode>>& getStatements() { return statements; }
+    
+    void addStatements(std::vector<std::shared_ptr<ASTNode>>& new_statements) {
+        this->statements.insert(
+            std::end(this->statements),
+            std::begin(new_statements),
+            std::end(new_statements)
+        );
+    }
+
+    virtual void printValue(std::ostream& os = std::cout) const { os << node_type; }
+
+    void print(int indent = 0, std::ostream& os = std::cout) const {
+        std::string indentStr = ""; 
+        for (int i = 0; i < indent-1; i++) {indentStr += "    ";} 
+        
+        os << indentStr << "";
+        this->printValue(os);
+        os << '\n';
+        
+        for (const auto& stmt : statements) {
+            stmt->print(indent + 2, os);
+        }
+    }
+
+    virtual void printFlat(int depth = 0, std::ostream& os = std::cout) {
+        if (!statements.empty()) {
+            os << "(";
+        }
+        
+        printValue(os);
+        
+        if (!statements.empty()) {
+            for (const auto& stmt : statements) {
+                os << " ";
+                stmt->printFlat(depth + 1, os);
+            }
+            os << ")";
+        }
+    }
+};
+
+
+class AST {
+private:
+    std::shared_ptr<ASTNode> root = nullptr;
+
+public:
+    AST() {}
+    AST(std::shared_ptr<ASTNode> rootNode) : root(rootNode) {}
+
+    std::shared_ptr<ASTNode> getRoot() { return root; }
+    bool isEmpty() const { return root == nullptr; }
+
+    void print(bool flat = false, std::ostream& os = std::cout) const {
+        if (root) {
+            if (!flat) root->print(0);
+            else root->printFlat(0, os);
+            std::cout << "\n";
+        } else {
+            std::cout << "AST is empty.\n\n";
+        }
+    }
+};
+
+
+class LiteralInt : public ASTNode {
+    int value;
+public:
+    void printValue(std::ostream& os = std::cout) const override { os << value; }
+    int getValue() { return value; }
+    LiteralInt(std::string t, int v) : ASTNode(t), value(v) {}
+};
+
+class LiteralBool : public ASTNode {
+    bool value;
+public:
+    void printValue(std::ostream& os = std::cout) const override {
+        if (value) { os << "TRUE"; }
+        else { os << "FALSE"; }
+    }
+    bool getValue() { return value; }
+    LiteralBool(std::string t, bool v) : ASTNode(t), value(v) {}
+};
+
+class ListNode : public ASTNode { 
+public: 
+    ListNode(std::string t) : ASTNode(t) {}
+    void printFlat(int depth = 0, std::ostream& os = std::cout) override {
+        os << "(";
+        if (!getStatements().empty()) {
+            for (const auto& stmt : getStatements()) {
+                os << " ";
+                stmt->printFlat(depth, os);
+            }
+        }
+        os << ")";
+    }
+};
+
+class LiteralNil : public ASTNode { public: LiteralNil(std::string t) : ASTNode(t) {} };
+
+class Identifier : public ASTNode {
+    std::string value;
+public:
+    void printValue(std::ostream& os = std::cout) const override { os << value; }
+    std::string getValue() { return value; }
+    Identifier(std::string t, std::string v) : ASTNode(t), value(v) {}
+};
+
+
+};
