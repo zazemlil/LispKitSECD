@@ -145,14 +145,18 @@ public:
 };
 
 inline std::shared_ptr<ASTNode> ASTNode::cdr() {
-    if (this->getStatementCount() <= 1) {
-        return std::make_shared<LiteralNil>("NIL");
+    if (this->getStatementCount() > 0 || this->getNodeType() == "NIL") {
+        if (this->getStatementCount() <= 1) {
+            return std::make_shared<LiteralNil>("NIL");
+        }
+        std::shared_ptr<ASTNode> l = std::make_shared<ListNode>("LIST");
+        for (size_t i = 1; i < this->getStatementCount(); i++) {
+            l->addStatement(this->getStatement(i));
+        }
+        return l;
     }
-    std::shared_ptr<ASTNode> l = std::make_shared<ListNode>("LIST");
-    for (size_t i = 1; i < this->getStatementCount(); i++) {
-        l->addStatement(this->getStatement(i));
-    }
-    return l;
+
+    throw std::runtime_error("Cdr error: second param must be List or Nil");
 }
 
 inline std::shared_ptr<ListNode> ASTNode::cons(std::shared_ptr<ASTNode> node) {

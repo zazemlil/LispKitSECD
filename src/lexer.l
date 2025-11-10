@@ -31,6 +31,10 @@ static int current_column = 1;
 "("                   { return Parser::token::T_PARENTHESIS_OPEN; }
 ")"                   { return Parser::token::T_PARENTHESIS_CLOSE; }
 
+"NIL"                 { yylval->emplace<std::string>("NIL"); return Parser::token::T_LITERAL_NIL; }
+"TRUE"                { yylval->emplace<std::string>("TRUE"); return Parser::token::T_LITERAL_TRUE; }
+"FALSE"               { yylval->emplace<std::string>("FALSE"); return Parser::token::T_LITERAL_FALSE; }
+
 [a-zA-z][a-zA-z|0-9]* { yylval->emplace<std::string>(std::string(yytext, yyleng)); return Parser::token::T_IDENTIFIER; }
 [-]?[0-9]+            { yylval->emplace<int>(atoi(yytext)); return Parser::token::T_LITERAL_INT; }
 

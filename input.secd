@@ -1,1 +1,1 @@
-( LDC 2 LDC 1 CONS STOP)
+( LDC (1 2 3) CDR STOP)

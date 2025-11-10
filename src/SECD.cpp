@@ -88,12 +88,16 @@ void SECD::_car()
 {
 }
 
-void SECD::_cdr()
-{
+void SECD::_cdr() {
+    _stack = _stack->car()->cdr()->cons(_stack->cdr());
+    _control = _control->cdr();
 }
 
-void SECD::_atom()
-{
+void SECD::_atom() {
+    bool is_atom = (std::dynamic_pointer_cast<syntax_tree::ListNode>(_stack->car()) == nullptr);
+    auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", is_atom);
+    _stack = new_bool->cons(_stack->cdr());
+    _control = _control->cdr();
 }
 
 void SECD::_cons() {
