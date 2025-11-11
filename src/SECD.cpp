@@ -56,16 +56,22 @@ void SECD::_ldc() {
     _control = _control->cdr()->cdr();
 }
 
-void SECD::_ldf()
-{
+void SECD::_ldf() {
+    _work = _control->cdr()->car()->cons(_environ);
+    _stack = _work->cons(_stack);
+    _control = _control->cdr()->cdr();
+    _work = _nil;
 }
 
 void SECD::_ap()
 {
 }
 
-void SECD::_rtn()
-{
+void SECD::_rtn() {
+    _stack = _stack->car()->cons(_dump->car());
+    _environ = _dump->cdr()->car();
+    _control = _dump->cdr()->cdr()->car();
+    _dump = _dump->cdr()->cdr()->cdr();
 }
 
 void SECD::_dum()
