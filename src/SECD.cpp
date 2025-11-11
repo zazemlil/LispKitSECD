@@ -76,12 +76,26 @@ void SECD::_rap()
 {
 }
 
-void SECD::_sel()
-{
+void SECD::_sel() {
+    if (auto bool_lit = std::dynamic_pointer_cast<syntax_tree::LiteralBool>(_stack->car())) {
+        _dump = _control->cdr()->cdr()->cdr()->cons(_dump);
+
+        if (bool_lit->getValue() == true) {
+            _control = _control->cdr()->car();
+        }
+        else {
+            _control = _control->cdr()->cdr()->car();
+        }
+        _stack = _stack->cdr();
+    }
+    else {
+        throw std::runtime_error("Cond error: first param must be Boolean");
+    }
 }
 
-void SECD::_join()
-{
+void SECD::_join() {
+    _control = _dump->car();
+    _dump = _dump->cdr();
 }
 
 void SECD::_car() {
