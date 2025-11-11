@@ -47,8 +47,23 @@ AST SECD::execute(Node fn) {
     return syntax_tree::AST(_stack->getStatement(0));
 }
 
-void SECD::_ld()
-{
+void SECD::_ld() {
+    _work = _environ;
+
+    auto v1 = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_control->cdr()->car()->car());
+    auto v2 = std::dynamic_pointer_cast<syntax_tree::LiteralInt>(_control->cdr()->car()->cdr()->car());
+
+    for (int i = 1; i <= v1->getValue(); ++i) {
+        _work = _work->cdr();
+    }
+    _work = _work->car();
+    for (int i = 1; i <= v2->getValue(); ++i) {
+        _work = _work->cdr();
+    }
+    _work = _work->car();
+    _stack = _work->cons(_stack);
+    _control = _control->cdr()->cdr();
+    _work = _nil;
 }
 
 void SECD::_ldc() {
@@ -63,8 +78,13 @@ void SECD::_ldf() {
     _work = _nil;
 }
 
-void SECD::_ap()
-{
+void SECD::_ap() {
+    _dump = _control->cdr()->cons(_dump);
+    _dump = _environ->cons(_dump);
+    _dump = _stack->cdr()->cdr()->cons(_dump);
+    _environ = _stack->cdr()->car()->cons(_stack->car()->cdr());
+    _control = _stack->car()->car();
+    _stack = _nil;
 }
 
 void SECD::_rtn() {

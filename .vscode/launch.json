@@ -5,7 +5,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/linux/main",
-            "args": ["${workspaceFolder}/input.in"],
+            "args": ["${workspaceFolder}/input.secd"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
