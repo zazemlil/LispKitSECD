@@ -94,12 +94,19 @@ void SECD::_rtn() {
     _dump = _dump->cdr()->cdr()->cdr();
 }
 
-void SECD::_dum()
-{
+void SECD::_dum() {
+    _environ = _nil->cons(_environ);
+    _control = _control->cdr();
 }
 
-void SECD::_rap()
-{
+void SECD::_rap() {
+    _dump = _control->cdr()->cons(_dump);
+    _dump = _environ->cdr()->cons(_dump);
+    _dump = _stack->cdr()->cdr()->cons(_dump);
+    _environ = _stack->car()->cdr();
+    *_environ->car() = *_stack->cdr()->car();
+    _control = _stack->car()->car();
+    _stack = _nil;
 }
 
 void SECD::_sel() {
