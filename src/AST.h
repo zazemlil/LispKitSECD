@@ -52,6 +52,32 @@ public:
         }
     }
 
+    void printRecFlatStack(int deep, int maxDeep, int depth = 0, std::ostream& os = std::cout) const {
+        this->printValue(os);
+        
+        for (const auto& stmt : statements) {
+            os << "\n\t";
+            stmt->printRecFlat(deep+1, maxDeep, depth + 1, os);
+        }
+    }
+
+    void printRecFlat(int deep, int maxDeep, int depth = 0, std::ostream& os = std::cout) const {
+        if (!statements.empty()) {
+            os << "(";
+        }
+        
+        printValue(os);
+        
+        if (deep <= maxDeep)
+        if (!statements.empty()) {
+            for (const auto& stmt : statements) {
+                os << " ";
+                stmt->printRecFlat(deep+1, maxDeep, depth + 1, os);
+            }
+            os << ")";
+        }
+    }
+
     virtual void printFlat(int depth = 0, std::ostream& os = std::cout) {
         if (!statements.empty()) {
             os << "(";
