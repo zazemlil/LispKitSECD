@@ -8,21 +8,32 @@ SECD::SECD() {
 
 SECD::~SECD() {}
 
-void SECD::printSecdState() {
+void SECD::printSecdState(bool recLimit) {
     std::cout << "\n###########################\n_Stack = \n";
-    _stack->printRecFlatStack(0, 3);
-    std::cout << "\n\n_Environ = \n";
-    _environ->printRecFlatStack(0, 3);
-    std::cout << "\n\n_Control = \n";
-    _control->printRecFlatStack(0, 3);
-    std::cout << "\n\n_Dump = \n";
-    _dump->printRecFlatStack(0, 3);
+    if (recLimit) {
+        _stack->printRecFlatStack(0, 3);
+        std::cout << "\n\n_Environ = \n";
+        _environ->printRecFlatStack(0, 3);
+        std::cout << "\n\n_Control = \n";
+        _control->printRecFlatStack(0, 3);
+        std::cout << "\n\n_Dump = \n";
+        _dump->printRecFlatStack(0, 3);
+    }
+    else {
+        _stack->printFlatStack();
+        std::cout << "\n\n_Environ = \n";
+        _environ->printFlatStack();
+        std::cout << "\n\n_Control = \n";
+        _control->printFlatStack();
+        std::cout << "\n\n_Dump = \n";
+        _dump->printFlatStack();
+    }
     std::cout << "\n---------------------------\n";
 
     std::cin.get();
 }
 
-AST SECD::execute(Node fn, Node arg, bool showSteps) {
+AST SECD::execute(Node fn, Node arg, bool showSteps, bool recLimit) {
     if (arg != nullptr) { _stack = arg; }
     else { _stack = _nil; }
     
@@ -34,7 +45,7 @@ AST SECD::execute(Node fn, Node arg, bool showSteps) {
 
     stopped = false;
 
-    if (showSteps) printSecdState();
+    if (showSteps) printSecdState(recLimit);
 
     while (!stopped) {
         if (auto id = std::dynamic_pointer_cast<syntax_tree::Identifier>(_control->car())) {
@@ -60,7 +71,7 @@ AST SECD::execute(Node fn, Node arg, bool showSteps) {
             else if (id->getValue() == "LE")    { _le(); }
             else if (id->getValue() == "STOP")  { _stop(); }
         }
-        if (showSteps) printSecdState();
+        if (showSteps) printSecdState(recLimit);
     }
 
     return syntax_tree::AST(_stack->getStatement(0));

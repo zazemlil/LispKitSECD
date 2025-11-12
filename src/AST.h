@@ -52,6 +52,15 @@ public:
         }
     }
 
+    void printFlatStack(int depth = 0, std::ostream& os = std::cout) const {
+        this->printValue(os);
+        
+        for (const auto& stmt : statements) {
+            os << "\n\t";
+            stmt->printFlat(depth + 1, os);
+        }
+    }
+
     void printRecFlatStack(int deep, int maxDeep, int depth = 0, std::ostream& os = std::cout) const {
         this->printValue(os);
         

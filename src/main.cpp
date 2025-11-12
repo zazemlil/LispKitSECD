@@ -7,11 +7,19 @@ extern syntax_tree::AST analize(char* arg);
 
 int main(int argc, char* argv[])
 {   
-    bool s_flag = false;
+    bool s_flag = false, r_flag = false;
     int new_argc = argc;
     for (int i = 1; i < new_argc; i++) {
         if (std::string(argv[i]) == "-s") {
             s_flag = true;
+            for (int j = i; j < new_argc - 1; j++) {
+                argv[j] = argv[j + 1];
+            }
+            new_argc--;
+            i--;
+        }
+        if (std::string(argv[i]) == "-r") {
+            r_flag = true;
             for (int j = i; j < new_argc - 1; j++) {
                 argv[j] = argv[j + 1];
             }
@@ -42,7 +50,7 @@ int main(int argc, char* argv[])
     SECD* secd = new SECD();
     syntax_tree::AST result;
     try {
-        result = secd->execute(ast.getRoot(), arg.getRoot(), s_flag);
+        result = secd->execute(ast.getRoot(), arg.getRoot(), s_flag, r_flag);
         std::cout << "SECD execution success.\n";
     }
     catch(const std::exception& e) {
