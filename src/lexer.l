@@ -57,16 +57,11 @@ void set_input_file(yyscan_t scanner, const char* filename) {
     }
 }
 
-syntax_tree::AST analize(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl;
-        return syntax_tree::AST();
-    }
-    
+syntax_tree::AST analize(char* arg) {
     yyscan_t scanner;
     yylex_init(&scanner);
     
-    set_input_file(scanner, argv[1]);
+    set_input_file(scanner, arg);
     
     syntax_tree::AST result;
     lisp_for_kids::Parser parser{ scanner, result };

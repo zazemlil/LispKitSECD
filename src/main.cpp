@@ -3,7 +3,7 @@
 
 #include "SECD.h"
 
-extern syntax_tree::AST analize(int argc, char* argv[]);
+extern syntax_tree::AST analize(char* arg);
 
 int main(int argc, char* argv[])
 {   
@@ -21,17 +21,28 @@ int main(int argc, char* argv[])
     }
     argc = new_argc;
 
-    syntax_tree::AST ast = analize(argc, argv);
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl;
+        return -1;
+    }
+
+    syntax_tree::AST ast = analize(argv[1]);
 
     std::cout << "-----------------------------\n";
     std::cout << "----Abstract syntax tree:----\n";
     std::cout << "-----------------------------\n";
     ast.print();
 
+    syntax_tree::AST arg;
+    
+    if (argc == 3) {
+        arg = analize(argv[2]);
+    }
+
     SECD* secd = new SECD();
     syntax_tree::AST result;
     try {
-        result = secd->execute(ast.getRoot(), s_flag);
+        result = secd->execute(ast.getRoot(), arg.getRoot(), s_flag);
         std::cout << "SECD execution success.\n";
     }
     catch(const std::exception& e) {

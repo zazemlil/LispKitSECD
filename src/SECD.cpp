@@ -22,8 +22,10 @@ void SECD::printSecdState() {
     std::cin.get();
 }
 
-AST SECD::execute(Node fn, bool showSteps) {
-    _stack = _nil;
+AST SECD::execute(Node fn, Node arg, bool showSteps) {
+    if (arg != nullptr) { _stack = arg; }
+    else { _stack = _nil; }
+    
     _environ = _nil;
     _control = fn;
     _dump = _nil;

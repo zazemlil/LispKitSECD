@@ -52,6 +52,6 @@ public:
     SECD();
     ~SECD();
 
-    AST execute(Node fn, bool showSteps);
+    AST execute(Node fn, Node arg, bool showSteps);
     
 };
