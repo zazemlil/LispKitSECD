@@ -8,7 +8,21 @@ SECD::SECD() {
 
 SECD::~SECD() {}
 
-AST SECD::execute(Node fn) {
+void SECD::printSecdState() {
+    std::cout << "\n###########################\n_Stack = \n";
+    _stack->printRecFlatStack(0, 3);
+    std::cout << "\n\n_Environ = \n";
+    _environ->printRecFlatStack(0, 3);
+    std::cout << "\n\n_Control = \n";
+    _control->printRecFlatStack(0, 3);
+    std::cout << "\n\n_Dump = \n";
+    _dump->printRecFlatStack(0, 3);
+    std::cout << "\n---------------------------\n";
+
+    std::cin.get();
+}
+
+AST SECD::execute(Node fn, bool showSteps) {
     _stack = _nil;
     _environ = _nil;
     _control = fn;
@@ -17,6 +31,8 @@ AST SECD::execute(Node fn) {
     _work = _nil;
 
     stopped = false;
+
+    if (showSteps) printSecdState();
 
     while (!stopped) {
         if (auto id = std::dynamic_pointer_cast<syntax_tree::Identifier>(_control->car())) {
@@ -42,6 +58,7 @@ AST SECD::execute(Node fn) {
             else if (id->getValue() == "LE")    { _le(); }
             else if (id->getValue() == "STOP")  { _stop(); }
         }
+        if (showSteps) printSecdState();
     }
 
     return syntax_tree::AST(_stack->getStatement(0));
@@ -95,7 +112,9 @@ void SECD::_rtn() {
 }
 
 void SECD::_dum() {
-    _environ = _nil->cons(_environ);
+    //auto omega = std::make_shared<syntax_tree::ListNode>("LIST");
+    //_environ = omega->cons(_environ);
+    _environ = _nil->cons(_environ); // 
     _control = _control->cdr();
 }
 
@@ -174,6 +193,14 @@ void SECD::_equal() {
             if (auto second_lit = std::dynamic_pointer_cast<syntax_tree::LiteralBool>(second)) {
                 auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", first_lit->getValue() 
                                                                                         == second_lit->getValue());
+                _stack = new_bool->cons(_stack->cdr()->cdr());
+                _control = _control->cdr();
+                return;
+            }
+        }
+        if (auto first_lit = std::dynamic_pointer_cast<syntax_tree::LiteralNil>(first)) {
+            if (auto second_lit = std::dynamic_pointer_cast<syntax_tree::LiteralNil>(second)) {
+                auto new_bool = std::make_shared<syntax_tree::LiteralBool>("LiteralBool", true);
                 _stack = new_bool->cons(_stack->cdr()->cdr());
                 _control = _control->cdr();
                 return;

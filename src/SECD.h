@@ -46,10 +46,12 @@ class SECD {
     void _le();
     void _stop();
 
+    void printSecdState();
+
 public:
     SECD();
     ~SECD();
 
-    AST execute(Node fn);
+    AST execute(Node fn, bool showSteps);
     
 };
