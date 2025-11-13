@@ -125,9 +125,8 @@ void SECD::_rtn() {
 }
 
 void SECD::_dum() {
-    //auto omega = std::make_shared<syntax_tree::ListNode>("LIST");
-    //_environ = omega->cons(_environ);
-    _environ = _nil->cons(_environ); // 
+    auto omega = std::make_shared<syntax_tree::ListNode>("LIST");
+    _environ = omega->cons(_environ);
     _control = _control->cdr();
 }
 
