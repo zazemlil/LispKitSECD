@@ -1,1 +1,3 @@
-(ADD (QUOTE 1) (QUOTE 2))
+(
+    (ADD (QUOTE 2) (QUOTE 5))
+)
