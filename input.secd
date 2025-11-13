@@ -1,11 +1,8 @@
-( DUM LDC NIL LDF ( LD ( 0 1) LDC NIL EQUAL SEL ( LDC NIL JOIN) ( LDC NIL LD ( 0 1) CDR CONS LD ( 0 0) CONS LD ( 1 0) AP LD ( 0 0) LD ( 0 1) CAR MUL CONS JOIN) RTN) CONS LDF ( LDC NIL LDC ( 1 2 3 4 -5) CONS LDC 30 CONS LD ( 0 0) AP RTN) RAP STOP)
+;( DUM LDC NIL LDF ( LD ( 0 1) LDC NIL EQUAL SEL ( LDC NIL JOIN) ( LDC NIL LD ( 0 1) CDR CONS LD ( 0 0) CONS LD ( 1 0) AP LD ( 0 0) LD ( 0 1) CAR MUL CONS JOIN) RTN) CONS LDF ( LDC NIL LDC ( 1 2 3 4 -5) CONS LDC 30 CONS LD ( 0 0) AP RTN) RAP STOP)
 ;( LDC NIL LDF ( LD ( 0 0) CAR RTN) CONS LDF ( LD ( 0 0) RTN) AP STOP)
 
-; (let f (f (LAMBDA (x) x)))
-; ( LDC NIL LDF ( LD ( 0 0) RTN) CONS LDF ( LD ( 0 0) RTN) AP STOP)
+; передаваемая fn для запуска с args (лямбда с AP в конце)
+; (LDF (LD ( 0 0) LD ( 0 0) MUL RTN) AP STOP)
+; ( LDF ( LD ( 0 0) RTN) AP STOP)
 
-; (let (f 1) (f (LAMBDA (x) x)))
-;( LDC NIL LDF ( LD ( 0 0) RTN) CONS LDF ( LDC NIL LDC 1 CONS LD ( 0 0) AP RTN) AP STOP)
-
-; как надо (let f (f (LAMBDA (x) x))) c аргументом
-;( LDC NIL LDF ( LD ( 0 0) RTN) CONS LDF ( LD ( 0 0) AP RTN) AP STOP)
+( LDC 1 LDC 2 ADD STOP)

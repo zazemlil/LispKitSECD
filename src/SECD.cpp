@@ -34,7 +34,7 @@ void SECD::printSecdState(bool recLimit) {
 }
 
 AST SECD::execute(Node fn, Node arg, bool showSteps, bool recLimit) {
-    if (arg != nullptr) { _stack = arg; }
+    if (arg != nullptr) { _stack = arg->cons(_nil); }
     else { _stack = _nil; }
     
     _environ = _nil;
