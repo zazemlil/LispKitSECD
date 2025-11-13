@@ -1,12 +1,11 @@
 (
-    (LETREC COMPILE
-
+    (LETREC COMPILE 
         (COMPILE (LAMBDA (E) (
                 COMP E (QUOTE NIL) (QUOTE (STOP))
             )
         ))
         (COMP (LAMBDA (E N C)
-                (COND (ATOM E)
+                (COND (ATOM E) 
                     (CONS (QUOTE LD) (CONS (LOCATION E N) C))
                 (COND (EQUAL (CAR E) (QUOTE QUOTE))
                     (CONS (QUOTE LDC) (CONS (CAR (CDR E)) C))
@@ -58,7 +57,7 @@
                 (COMPLIS (CDR E) N (COMP (CAR E) N (CONS (QUOTE AP) C)))
             )))))))))))))))))
         ))
-        (COMPLIS (LAMBDA (E N C)
+        (COMPLIS (LAMBDA (E N C) ; представляет список в виде CONS`ов
             (COND (EQUAL E (QUOTE NIL)) 
                 (CONS (QUOTE LDC) (CONS (QUOTE NIL) C))
                 (COMPLIS (CDR E) N (COMP (CAR E) N (CONS (QUOTE CONS) C)))
@@ -67,7 +66,7 @@
         (LOCATION (LAMBDA (E1 N1)
             (LETREC
                 (COND (MEMBER E1 (CAR N1)) 
-                    (CONS (QUOTE 0) (CONS (POSN E1 (CAR N1)) NIL)) 
+                    (CONS (QUOTE 0) (CONS (POSN E1 (CAR N1)) (QUOTE NIL))) 
                     (INCAR (LOCATION E1 (CDR N1)))
                 )
                 
@@ -86,7 +85,7 @@
         )
         (EXPRS (LAMBDA (D)
             (COND (EQUAL D (QUOTE NIL)) (QUOTE NIL)
-                (CONS (CAR (CDR (CAR D))) (EXPRS (CDR D)))))
+                (CONS (CAR (CDR (CAR D))) (EXPRS (CDR D))))) ; было (CONS (CDR (CAR D)) (EXPRS (CDR D)))
         )
     )
 )
