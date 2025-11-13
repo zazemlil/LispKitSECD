@@ -11,13 +11,13 @@ SECD::~SECD() {}
 void SECD::printSecdState(bool recLimit) {
     std::cout << "\n###########################\n_Stack = \n";
     if (recLimit) {
-        _stack->printRecFlatStack(0, 3);
+        _stack->printRecFlatStack(0, 5);
         std::cout << "\n\n_Environ = \n";
-        _environ->printRecFlatStack(0, 3);
+        _environ->printRecFlatStack(0, 5);
         std::cout << "\n\n_Control = \n";
-        _control->printRecFlatStack(0, 3);
+        _control->printRecFlatStack(0, 5);
         std::cout << "\n\n_Dump = \n";
-        _dump->printRecFlatStack(0, 3);
+        _dump->printRecFlatStack(0, 5);
     }
     else {
         _stack->printFlatStack();

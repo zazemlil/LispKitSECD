@@ -70,20 +70,22 @@ public:
         }
     }
 
-    void printRecFlat(int deep, int maxDeep, int depth = 0, std::ostream& os = std::cout) const {
+    virtual void printRecFlat(int deep, int maxDeep, int depth = 0, std::ostream& os = std::cout) {
         if (!statements.empty()) {
             os << "(";
         }
         
         printValue(os);
         
-        if (deep <= maxDeep)
         if (!statements.empty()) {
-            for (const auto& stmt : statements) {
-                os << " ";
-                stmt->printRecFlat(deep+1, maxDeep, depth + 1, os);
+            if (deep <= maxDeep) {
+                for (const auto& stmt : statements) {
+                    os << " ";
+                    stmt->printRecFlat(deep+1, maxDeep, depth + 1, os);
+                }
+                os << ")";
             }
-            os << ")";
+            else { os << " @ "; }
         }
     }
 
@@ -161,6 +163,19 @@ public:
                 os << " ";
                 stmt->printFlat(depth, os);
             }
+        }
+        os << ")";
+    }
+    void printRecFlat(int deep, int maxDeep, int depth = 0, std::ostream& os = std::cout) override {
+        os << "(";
+        if (!getStatements().empty()) {
+            if (deep <= maxDeep) {
+                for (const auto& stmt : getStatements()) {
+                    os << " ";
+                    stmt->printRecFlat(deep+1, maxDeep, depth + 1, os);
+                }
+            }
+            else { os << " @ "; }
         }
         os << ")";
     }
