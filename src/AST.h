@@ -5,6 +5,9 @@
 #include <iostream>
 #include <fstream>
 
+#include "cBigNumber/Cbignum.h"
+#include "cBigNumber/Cbignums.h"
+
 namespace syntax_tree {
 
 class ListNode;
