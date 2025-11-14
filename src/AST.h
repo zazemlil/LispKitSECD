@@ -138,11 +138,11 @@ public:
 
 
 class LiteralInt : public ASTNode {
-    int value;
+    cBigNumber value;
 public:
     void printValue(std::ostream& os = std::cout) const override { os << value; }
-    int getValue() { return value; }
-    LiteralInt(std::string t, int v) : ASTNode(t), value(v) {}
+    cBigNumber getValue() { return value; }
+    LiteralInt(std::string t, cBigNumber v) : ASTNode(t), value(v) {}
 };
 
 class LiteralBool : public ASTNode {
